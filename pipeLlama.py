@@ -75,9 +75,9 @@ class Pipeline:
 
         # You may want to stream the response directly or aggregate it
         # If streaming:
-        for chunk in response.response_gen:
-            yield chunk  # Streaming the response chunks as they are processed.
+        #for chunk in response.response_gen:
+        #    yield chunk  # Streaming the response chunks as they are processed.
         
         # Or you can return the complete response once it's fully processed:
-        # return response.response
+        return response.response
 
