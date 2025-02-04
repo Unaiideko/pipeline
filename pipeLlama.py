@@ -58,17 +58,26 @@ class Pipeline:
     async def on_shutdown(self):
         # This function is called when the server is stopped.
         pass
-
     def pipe(
         self, user_message: str, model_id: str, messages: List[dict], body: dict
     ) -> Union[str, Generator, Iterator]:
         # This is where you can add your custom RAG pipeline.
-        # Typically, you would retrieve relevant information from your knowledge base and synthesize it to generate a response.
-
-        print(messages)
-        print(user_message)
-
+        # Retrieve relevant information from your knowledge base and synthesize it to generate a response.
+        
+        print(f"Received message: {user_message}")
+        print(f"Previous messages: {messages}")
+        
+        # Initialize the query engine using the previously built index
         query_engine = self.index.as_query_engine(streaming=True)
+        
+        # Query the engine with the user's message
         response = query_engine.query(user_message)
 
-        return response.response_gen
+        # You may want to stream the response directly or aggregate it
+        # If streaming:
+        for chunk in response.response_gen:
+            yield chunk  # Streaming the response chunks as they are processed.
+        
+        # Or you can return the complete response once it's fully processed:
+        # return response.response
+
